@@ -26,6 +26,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
     "apple.com"
     
     ]
+    var websiteSelected: String?
     
     override func loadView() {
         webView = WKWebView()
@@ -58,9 +59,23 @@ class ViewController: UIViewController, WKNavigationDelegate {
             , context: nil)
         
         // Do any additional setup after loading the view.
-        let url = URL(string: "https://www.hackingwithswift.com")!
-        webView.load(URLRequest(url: url))
+        
+        if let web = websiteSelected {
+            let url = URL(string: "https://www.\(web)")!
+            webView.load(URLRequest(url: url))
+            
+        } else {
+            let url = URL(string: "https://www.hackingwithswift.com")!
+            webView.load(URLRequest(url: url))
+           
+        }
+        
+        
         webView.allowsBackForwardNavigationGestures = true
+        
+        
+        
+        
     }
     
     @objc func openTapped() {
