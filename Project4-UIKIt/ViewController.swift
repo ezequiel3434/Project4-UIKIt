@@ -14,6 +14,12 @@ class ViewController: UIViewController, WKNavigationDelegate {
     var webView: WKWebView!
     var progressView = UIProgressView()
     
+    let websites = [
+    "hackingwithswift.com",
+    "apple.com"
+    
+    ]
+    
     override func loadView() {
         webView = WKWebView()
         webView.navigationDelegate = self
@@ -67,6 +73,24 @@ class ViewController: UIViewController, WKNavigationDelegate {
         if keyPath == "estimatedProgress" {
             progressView.progress = Float(webView.estimatedProgress)
         }
+    }
+    
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let url = navigationAction.request.url
+        if let host = url?.host {
+            for website in websites {
+                if host.contains(website) {
+                    decisionHandler(.allow)
+                    return
+                }
+            }
+            let denied = UIAlertController(title: "denied", message: "This site is not allowed", preferredStyle: .alert)
+            denied.addAction(UIAlertAction(title: "cancel", style: .cancel, handler: nil))
+            present(denied,animated: true)
+            
+        }
+        decisionHandler(.cancel)
     }
 }
 
