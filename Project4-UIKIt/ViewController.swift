@@ -14,6 +14,13 @@ class ViewController: UIViewController, WKNavigationDelegate {
     var webView: WKWebView!
     var progressView = UIProgressView()
     
+    // NavigationButtons
+    var backBtn: UIBarButtonItem!
+    var fowardBtn: UIBarButtonItem!
+    
+   
+    
+    
     let websites = [
     "hackingwithswift.com",
     "apple.com"
@@ -29,6 +36,14 @@ class ViewController: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        backBtn = UIBarButtonItem(image: UIImage(named: "j5QrV"), style: .plain, target: self, action: #selector(goBack))
+        fowardBtn = UIBarButtonItem(image: UIImage(named: "4QoSE"), style: .plain, target: self, action: #selector(goFoward))
+        
+        
+        backBtn.isEnabled = false
+        fowardBtn.isEnabled = false
+        
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Open", style: .plain, target: self, action: #selector(openTapped))
         
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -36,7 +51,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
         progressView = UIProgressView(progressViewStyle: .default)
         progressView.sizeToFit()
         let progressButton = UIBarButtonItem(customView: progressView)
-        toolbarItems = [progressButton, spacer, refresh]
+        toolbarItems = [backBtn, progressButton, spacer, refresh, fowardBtn]
         navigationController?.isToolbarHidden = false
         
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new
@@ -66,6 +81,8 @@ class ViewController: UIViewController, WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         title = webView.title
+        backBtn.isEnabled = webView.canGoBack
+        fowardBtn.isEnabled = webView.canGoForward
     }
 
 
@@ -92,5 +109,21 @@ class ViewController: UIViewController, WKNavigationDelegate {
         }
         decisionHandler(.cancel)
     }
+    
+    
+
+    
+    
+    
+    // Back and foward actions
+    @objc func goBack() {
+        webView.goBack()
+    }
+    @objc func goFoward() {
+        webView.goForward()
+    }
 }
+
+
+
 
